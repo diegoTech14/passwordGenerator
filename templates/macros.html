@@ -1,0 +1,52 @@
+{% macro login_form(field) %}
+    <!-- These are the class form atributtes like label or input-->
+    <div class="form-group">
+      {{ field.label }}
+      {{ field(**kwargs) }}
+    
+{% endmacro %}
+
+{% macro create_form(field) %}
+    <div class="form-group col-md">
+      {{ field.label }}
+      {{ field(**kwargs) }}
+
+      {% if field.errors %}
+
+        <ul>
+          {%  for error in field.errors %}
+            <li style="list-style-type:none;">
+              <div class="text-danger">
+                {{ error }}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro nav_bar() %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Password Generator</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Config
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="#">LogOut</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+</nav>
+
+{% endmacro %}

@@ -1,0 +1,4 @@
+# ignore all .pem files
+*.pem
+/Pipfile.lock
+

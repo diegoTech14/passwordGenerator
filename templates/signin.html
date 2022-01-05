@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% from "macros.html" import create_form %}
+    <div class="mt-5 mb-3">
+
+        <h1 class="text-center">Create a new account</h1>
+        <p class="text-center">For a better experience</p>
+
+    </div>
+    <form action="" method="POST" class="d-flex justify-content-center mt-5">
+        {{ form.csrf_token }} <!-- security token of CSRF-->
+        <div class="form-group w-75">
+            <div class="row">
+                {{ create_form(form.name) }}
+                {{ create_form(form.surnames) }}
+            </div>
+            <div class="row">
+                {{ create_form(form.age) }}
+                {{ create_form(form.email) }}
+            </div>
+            <div class="row">
+                {{ create_form(form.password) }}
+                {{ create_form(form.user_name) }}
+            </div>
+            <div class="buttons d-flex justify-content-center">
+                <button type="submit" class="btn btn-success">Create</button>
+            </div>
+        </div>
+
+
+    </form>
+{% endblock %}
