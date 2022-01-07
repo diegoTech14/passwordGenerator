@@ -48,5 +48,12 @@
       </ul>
     </div>
 </nav>
+{% endmacro %}
 
+{% macro generate_password_form(field) %}
+  <div class="form-group col-md">
+    {{ field.label }}
+    {{ field(**kwargs) }}
+
+  </div>
 {% endmacro %}

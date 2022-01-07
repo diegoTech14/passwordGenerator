@@ -36,9 +36,6 @@ def login():
 
     return render_resource
 
-
-
-
 @app.route('/signin', methods=['GET', 'POST'])
 def create_account():
     
@@ -69,7 +66,19 @@ def create_account():
 
     return render_resource
 
-
+@app.route('/generatePassword', methods=['GET', 'POST'])
+def generate_password():
+    form = forms.generateNewPassword()
+    from logic.generate_password import PasswordGenerator
+    
+    if form.validate_on_submit():
+        password_length = form.password_length.data
+        generator = PasswordGenerator()
+        password = generator.generate_password(password_length)
+    
+        return render_template('generate_password_page.html', form=form, password=password)
+    else:
+        return render_template('generate_password_page.html', form=form)
     
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField
 from wtforms import validators
 from wtforms.validators import DataRequired, Email
+from wtforms import IntegerField
 import re
 
 class LoginForm(FlaskForm):
 
-    __data_required_message = "This field is required";
+    __data_required_message = "This field is required"
 
     username = StringField('Username', 
                             validators=[DataRequired(__data_required_message)],
@@ -15,7 +16,27 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', 
                             validators=[DataRequired(__data_required_message)],
                             render_kw={'class': 'form-control'})
+
+
+class generateNewPassword(FlaskForm):
+
+    __data_required_message = "This field is required"
     
+    #def __password_validation(form, field):
+        
+    #    if len(str(field.data)) < 8:
+    #        raise validators.ValidationError("The password must be 8 or more characters")
+    
+    passwordGenerated = StringField('Password',
+        render_kw={'readonly': True, 'class': 'form-control', 'id': 'password_label'}
+    )
+
+    password_length = IntegerField(
+        render_kw={'value':8, 'min':8, 'max':50}
+    )
+
+    
+
 
 class CreateAccount(FlaskForm):
 
@@ -50,6 +71,7 @@ class CreateAccount(FlaskForm):
     password = PasswordField('Password', 
                         validators=[DataRequired(), __password_validation],
                         render_kw={'class': 'form-control', 'id': 'input'})
+    
 
     user_name = StringField('User Name', 
                         validators=[DataRequired(__data_required_message)],

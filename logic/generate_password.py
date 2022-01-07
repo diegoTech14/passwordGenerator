@@ -15,6 +15,6 @@ class PasswordGenerator(object):
             while(len(self.new_password) < len_pass):
                 random_number = randint(0, len(chars)-1)
                 self.new_password += chars[random_number]
-            response = True
+            response = self.new_password
 
         return response 
