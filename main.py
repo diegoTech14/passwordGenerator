@@ -1,13 +1,10 @@
 from flask import Flask
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, session, request
+import json
 import forms
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
-
-@app.route('/generator', methods=['GET'])
-def generator_main_page():
-    return render_template("main_system.html")
 
 @app.route('/login', methods=["GET","POST"])
 def login():
@@ -15,28 +12,39 @@ def login():
     #instancing a form
     form = forms.LoginForm()
     render_resource = None
+    session.pop('user_name', None)
 
     if form.validate_on_submit():
         from data import queries
         queries = queries.Queries()
-        
+    
         data = {
             'user_name': form.username.data,
             'password': form.password.data
         }
 
         if queries.verify_user(**data):
-            render_resource = redirect(url_for('generator_main_page'))
+            session['user_name'] = data['user_name']
+
+            render_resource = redirect(url_for('generate_password'))
         else:
             flash('¡Something was wrong, please try again!', 'error')
-            render_resource = render_template("login.html", form=form)
+            render_resource = redirect(url_for('login'))
     else:
-        flash('¡Something was wrong, please try again!', 'error')
-        render_resource = render_template("login.html", form=form)
+        session.pop('user_name', None)
+        render_resource = render_template('login.html', form=form)
 
     return render_resource
 
-@app.route('/signin', methods=['GET', 'POST'])
+@app.route('/generator', methods=['GET'])
+def generator_main_page():
+    if 'user_name' in session:
+        return render_template("main_system.html")
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/signin', methods=['GET','POST'])
 def create_account():
     
     form = forms.CreateAccount()
@@ -66,19 +74,30 @@ def create_account():
 
     return render_resource
 
-@app.route('/generatePassword', methods=['GET', 'POST'])
+@app.route('/generate', methods=["GET","POST"])
 def generate_password():
     form = forms.generateNewPassword()
     from logic.generate_password import PasswordGenerator
-    
+    from logic.RSA_password import RSAPassword
+    resource = None
+
     if form.validate_on_submit():
         password_length = form.password_length.data
+        numberCheck = bool(request.form.get('numberCheckBox'));
+        lowerCheck = bool(request.form.get('lowerCheckBox'));
+        upperCheck = bool(request.form.get('upperCheckBox'));
+        punctCheck = bool(request.form.get('punctCheckBox'));
         generator = PasswordGenerator()
-        password = generator.generate_password(password_length)
-    
-        return render_template('generate_password_page.html', form=form, password=password)
+        password = generator.generate_password(password_length, numberCheck, lowerCheck, upperCheck, punctCheck)
+        rsa = RSAPassword()
+        data = {"password":password, "password_encrypted":rsa.encrypt(password)}
+
+        
+        resource = render_template('generate_password_page.html', form=form, data=data)
     else:
-        return render_template('generate_password_page.html', form=form)
-    
+        resource = render_template('generate_password_page.html', form=form)
+
+    return resource
+
 if __name__ == "__main__":
     app.run(debug=True)

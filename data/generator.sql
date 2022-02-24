@@ -31,13 +31,3 @@ CREATE TABLE registries(
             ON DELETE CASCADE
 );
 
-CREATE TABLE password_utility(
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    platform_name VARCHAR(100),
-    email_used VARCHAR(255),
-    ide_password INT,
-    CONSTRAINT fk_ide_password
-    FOREIGN KEY (ide_password)
-        REFERENCES passwords(id_password)
-            ON DELETE CASCADE
-);

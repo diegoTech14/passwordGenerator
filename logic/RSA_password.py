@@ -18,7 +18,6 @@ class RSAPassword(object):
     def __init__(self):
         self.__generate_keys()
 
-    @classmethod
     def encrypt(cls, password: str) -> str:
         
         response = None
@@ -32,13 +31,13 @@ class RSAPassword(object):
 
             response = cls.__password_encrypted.hex()    
             
-        except:
+        except Exception as error:
+            print(error)
             response = False
 
         finally:
             return response
 
-    @classmethod
     def decrypt(cls) -> str:
         
         response = None

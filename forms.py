@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms import validators
 from wtforms.validators import DataRequired, Email
 from wtforms import IntegerField
@@ -19,30 +19,24 @@ class LoginForm(FlaskForm):
 
 
 class generateNewPassword(FlaskForm):
+    
 
-    __data_required_message = "This field is required"
-    
-    #def __password_validation(form, field):
-        
-    #    if len(str(field.data)) < 8:
-    #        raise validators.ValidationError("The password must be 8 or more characters")
-    
     passwordGenerated = StringField('Password',
         render_kw={'readonly': True, 'class': 'form-control', 'id': 'password_label'}
     )
-
+    
     password_length = IntegerField(
         render_kw={'value':8, 'min':8, 'max':50}
     )
 
+    password_encrypted = TextAreaField('Password encrypted',
+        render_kw={'readonly': True, 'class': 'form-control', 'id':'password_encrypted'}
+    )
     
-
-
 class CreateAccount(FlaskForm):
 
-    __data_required_message = "This field is required";
+    __data_required_message = "This field is required"
     __email_valid_message = "This field requires a valid email"
-    __error_class = ''
 
     def __password_validation(form, field):
         

@@ -1,7 +1,8 @@
 import sys
 import bcrypt
+import os
 
-sys.path.append('C:\\Users\\diegoduarte14\\OneDrive\\Documentos\\generator\\logic\\validations\\')
+sys.path.append(os.path.join(os.getcwd(), "logic", "validations"))
 import validations
 
 class HashedPassword(object):
